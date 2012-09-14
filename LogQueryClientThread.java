@@ -4,7 +4,7 @@ import java.util.List;
 class LogQueryClientThread extends Thread {
 	private ServerProperty server = null;
 	private List< String > args = null;
-	private List< String > result;
+	private List< String > result = null;
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private LogQueryClient parent;
@@ -26,11 +26,12 @@ class LogQueryClientThread extends Thread {
 			input.close();
 			sock.close();
 		} catch(IOException ex) {
-			System.out.println(ex.getMessage());
-			System.exit(-1);
+			System.out.println(
+				"Failed to connect " + server.ip + ":"
+				+ server.port + " : " + ex.getMessage()
+			);
 		} catch(ClassNotFoundException ex) {
 			System.out.println(ex.getMessage());
-			System.exit(-1);
 		}
 	}
 

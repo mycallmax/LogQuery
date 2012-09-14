@@ -14,7 +14,6 @@ class LogQueryServerThread extends Thread {
 
 	private void exceptionHandler(Exception ex) {
 		System.out.println(ex.getMessage());
-		System.exit(-1);
 	}	
 
 	private List< String > grep(List< String > args) {
@@ -29,10 +28,10 @@ class LogQueryServerThread extends Thread {
 		} catch(Exception ex) {
 			exceptionHandler(ex);
 		}
+		ArrayList< String > result_list = new ArrayList< String >();
 		BufferedReader result =
 			new BufferedReader(new InputStreamReader(process.getInputStream()));
 		String line;
-		ArrayList< String > result_list = new ArrayList< String >();
 		try {
 			while((line = result.readLine()) != null) {
 				result_list.add(line);
@@ -48,7 +47,7 @@ class LogQueryServerThread extends Thread {
 			ObjectOutputStream output = new ObjectOutputStream(clientSock.getOutputStream());
 			ObjectInputStream input = new ObjectInputStream(clientSock.getInputStream());
 			List< String > args = (List< String >) input.readObject();
-			System.out.println(args.toString());
+			System.out.println("Received request: " + args.toString());
 			output.writeObject(grep(args));
 			output.close();
 			input.close();

@@ -24,7 +24,6 @@ class LogQueryServer {
 			} catch(IOException ex) {
 				exceptionHandler(ex);
 			}
-			
 			LogQueryServerThread worker = new LogQueryServerThread(client_sock);
 			worker.start();
 		}
@@ -32,7 +31,6 @@ class LogQueryServer {
 
 	private void exceptionHandler(Exception ex) {
 		System.out.println(ex.getMessage());
-		System.exit(-1);
 	}
 
 	public static void main(String[] args) {
