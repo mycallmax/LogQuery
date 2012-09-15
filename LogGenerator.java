@@ -25,7 +25,7 @@ public class LogGenerator
 	LogGenerator(int FileSize, int MachineID)
 	{
 		this.MachineID = MachineID;
-		this.FileName = "logs/machine." + MachineID + ".log_" + FileSize + "MB";
+		this.FileName = "logs/machine." + MachineID + ".log";
 		this.FileSize = FileSize;
 		file = new File(FileName);
 	}

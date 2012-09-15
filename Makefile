@@ -44,6 +44,7 @@ CLASSES = \
 	LogQueryServer.java \
 	LogQueryServerThread.java \
 	ServerProperty.java \
+	MyLogFormatter.java \
 	LogGenerator.java
 
 #
