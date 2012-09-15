@@ -39,11 +39,18 @@ test_grep "\"Frequent pattern from all logs\"" "(INFO|WARNING)"
 test_grep "\"Somewhat frequent pattern from all logs\"" "FINE"
 test_grep "\"Rare frequent pattern from all logs\"" "SEVERE"
 
-## Test greps for some logs
-
 ## Test greps for one log
-for ((j=0;j<$server_list_num;j++)); do
+for ((j=1;j<=$server_list_num;j++)); do
 	test_grep "\"Frequent pattern from one log: Machine $j\"" "(INFO|WARNING).*MachineID: $j"
 	test_grep "\"Somewhat frequent pattern one log: Machine $j\"" "FINE.*MachineID: $j"
 	test_grep "\"Rare frequent pattern from one log: Machine $j\"" "SEVERE.*MachineID: $j"
+done
+
+## Test greps for some logs
+for ((j=1;j<=$server_list_num;j++)); do
+	for ((k=$j+1;k<=$server_list_num;k++)); do
+		test_grep "\"Frequent pattern from some logs: Machine $j,$k\"" "(INFO|WARNING).*SomeMachineIDs: $j,$k"
+		test_grep "\"Somewhat frequent pattern some logs: Machine $j,$k\"" "FINE.*MachineID: $j,$k"
+		test_grep "\"Rare frequent pattern from some logs: Machine $j,$k\"" "SEVERE.*MachineID: $j,$k"
+	done
 done
