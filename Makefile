@@ -70,3 +70,9 @@ classes: $(CLASSES:.java=.class)
 
 clean:
 	$(RM) *.class
+
+#
+# Run the unit test
+#
+unittest: default
+	./LogQueryUnitTest.sh
