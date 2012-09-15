@@ -10,6 +10,12 @@ result_path=/tmp/LogQueryResult
 answer_path=/tmp/LogQueryAnswer
 
 ## arg1 = unit test name, arg2 = grep args
+generate_log() {
+	mkdir -p logs
+	for ((i=1;i<=$server_list_num;i++)); do
+		java LogGenerator 1 $i
+	done
+}
 test_grep() {
 	java LogQueryClient -E "$2" > $result_path
 	if [ -e $answer_path ]; then
@@ -25,12 +31,19 @@ test_grep() {
 		echo "Unit Test $1 failed"
 	fi
 }
+## Generate the test logs
+generate_log
 
+## Test greps for all logs
 test_grep "\"Frequent pattern from all logs\"" "(INFO|WARNING)"
 test_grep "\"Somewhat frequent pattern from all logs\"" "FINE"
 test_grep "\"Rare frequent pattern from all logs\"" "SEVERE"
+
+## Test greps for some logs
+
+## Test greps for one log
 for ((j=0;j<$server_list_num;j++)); do
-	test_grep "\"Frequent pattern from one log\"" "(INFO|WARNING).*MachineID: $j"
-	test_grep "\"Somewhat frequent pattern one log\"" "FINE.*MachineID: $j"
-	test_grep "\"Rare frequent pattern from one log\"" "SEVERE.*MachineID: $j"
+	test_grep "\"Frequent pattern from one log: Machine $j\"" "(INFO|WARNING).*MachineID: $j"
+	test_grep "\"Somewhat frequent pattern one log: Machine $j\"" "FINE.*MachineID: $j"
+	test_grep "\"Rare frequent pattern from one log: Machine $j\"" "SEVERE.*MachineID: $j"
 done
