@@ -3,13 +3,15 @@ import java.io.*;
 import java.util.*;
 class LogQueryServerThread extends Thread {
 	private Socket clientSock;
+	private String logFilePath;
 
-	LogQueryServerThread(Socket client_sock) {
+	LogQueryServerThread(Socket client_sock, String log_file_path) {
 		if (client_sock == null) {
 			System.out.println("client_sock can not be null.");
 			System.exit(-1);
 		}
 		this.clientSock = client_sock;
+		this.logFilePath = log_file_path;
 	}
 
 	private void exceptionHandler(Exception ex) {
@@ -21,7 +23,7 @@ class LogQueryServerThread extends Thread {
 		Process process = null;
 		try {
 			LinkedList< String > cmd_array = new LinkedList< String >(args);
-			cmd_array.add("logfile");
+			cmd_array.add(logFilePath);
 			cmd_array.add(0, "grep");
 			process = runtime.exec(cmd_array.toArray(new String[cmd_array.size()]));
 			process.waitFor();

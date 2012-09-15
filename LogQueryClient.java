@@ -48,8 +48,8 @@ class LogQueryClient {
 		LogQueryClient client = new LogQueryClient();
 		client.addServer(new ServerProperty("localhost", 1111));
 		client.addServer(new ServerProperty("localhost", 1122));
-		//client.addServer(new ServerProperty("localhost", 1133));
-		//client.addServer(new ServerProperty("localhost", 1144));
+		client.addServer(new ServerProperty("localhost", 1133));
+		client.addServer(new ServerProperty("localhost", 1144));
 		client.connect(args);
 	}
 }

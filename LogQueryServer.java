@@ -2,10 +2,12 @@ import java.io.*;
 import java.net.*;
 class LogQueryServer {
 	private int port;
+	private String logFilePath;
 	private ServerSocket sock;
 
-	LogQueryServer(int port) {
+	LogQueryServer(int port, String log_file_path) {
 		this.port = port;
+		this.logFilePath = log_file_path;
 	}
 
 	public void start() {
@@ -24,7 +26,8 @@ class LogQueryServer {
 			} catch(IOException ex) {
 				exceptionHandler(ex);
 			}
-			LogQueryServerThread worker = new LogQueryServerThread(client_sock);
+			LogQueryServerThread worker =
+				new LogQueryServerThread(client_sock, logFilePath);
 			worker.start();
 		}
 	}
@@ -34,7 +37,11 @@ class LogQueryServer {
 	}
 
 	public static void main(String[] args) {
-		LogQueryServer server = new LogQueryServer(Integer.parseInt(args[0]));
+		if (args.length < 2) {
+			System.out.println("Usage: java LogQueryServer <port> <logfile_path>");
+			System.exit(-1);
+		}
+		LogQueryServer server = new LogQueryServer(Integer.parseInt(args[0]), args[1]);
 		server.start();
 	}
 }
