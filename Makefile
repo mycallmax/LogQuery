@@ -43,7 +43,8 @@ CLASSES = \
         LogQueryClientThread.java \
         LogQueryServer.java \
         LogQueryServerThread.java \
-				ServerProperty.java
+		ServerProperty.java \
+		LogGenerator.java
 
 
 #
