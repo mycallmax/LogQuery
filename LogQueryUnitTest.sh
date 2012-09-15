@@ -8,12 +8,13 @@ log_path="~/code/java/LogQuery/logs"
 server_list_num=${#server_list[@]}
 result_path=/tmp/LogQueryResult
 answer_path=/tmp/LogQueryAnswer
+filesize=1
 
 ## arg1 = unit test name, arg2 = grep args
 generate_log() {
 	mkdir -p logs
 	for ((i=1;i<=$server_list_num;i++)); do
-		java LogGenerator 1 $i
+		java LogGenerator $filesize $i
 	done
 }
 test_grep() {
