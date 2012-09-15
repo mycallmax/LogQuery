@@ -25,7 +25,7 @@ public class LogGenerator
 	LogGenerator(int FileSize, int MachineID)
 	{
 		this.MachineID = MachineID;
-		this.FileName = "machine." + MachineID + ".log_" + FileSize + "MB";
+		this.FileName = "logs/machine." + MachineID + ".log_" + FileSize + "MB";
 		this.FileSize = FileSize;
 		file = new File(FileName);
 	}
@@ -101,7 +101,7 @@ public class LogGenerator
 			LOGGER.log(Level.SEVERE, null, ex);
 		}
 		// Set the formatting
-		fileHandler.setFormatter(new SimpleFormatter());
+		fileHandler.setFormatter(new MyLogFormatter());
 		LOGGER.addHandler(fileHandler);
 		// set all levels
 		LOGGER.setLevel(Level.ALL);
@@ -119,6 +119,11 @@ public class LogGenerator
 	// Main Funtion
 	public static void main(String[] args)
 	{
+	 if (args.length < 2) {
+      System.out.println("Usage: java LogGenerator <filesize> <MachineID>");
+      System.exit(-1);
+    }
+
 		LogGenerator MyLogGenerator = new LogGenerator(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
 		MyLogGenerator.generate();
 	}
