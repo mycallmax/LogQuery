@@ -21,23 +21,21 @@ class LogQueryServerThread extends Thread {
 	private List< String > grep(List< String > args) {
 		Runtime runtime = Runtime.getRuntime();
 		Process process = null;
+		ArrayList< String > result_list = new ArrayList< String >();
 		try {
 			LinkedList< String > cmd_array = new LinkedList< String >(args);
 			cmd_array.add(logFilePath);
 			cmd_array.add(0, "grep");
 			process = runtime.exec(cmd_array.toArray(new String[cmd_array.size()]));
-			process.waitFor();
-		} catch(Exception ex) {
-			exceptionHandler(ex);
-		}
-		ArrayList< String > result_list = new ArrayList< String >();
-		BufferedReader result =
-			new BufferedReader(new InputStreamReader(process.getInputStream()));
-		String line;
-		try {
+			BufferedReader result =
+				new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String line;
 			while((line = result.readLine()) != null) {
 				result_list.add(line);
 			}
+			process.waitFor();
+		} catch(InterruptedException ex) {
+			exceptionHandler(ex);
 		} catch(IOException ex) {
 			exceptionHandler(ex);
 		}
