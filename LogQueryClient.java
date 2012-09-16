@@ -57,10 +57,10 @@ class LogQueryClient {
 			System.exit(-1);
 		}
 		LogQueryClient client = new LogQueryClient();
-		client.addServer(new ServerProperty("localhost", 1111));
-		client.addServer(new ServerProperty("localhost", 1122));
-		client.addServer(new ServerProperty("localhost", 1133));
-		client.addServer(new ServerProperty("localhost", 1144));
+		client.addServer(new ServerProperty("130.126.112.146", 1111));
+		client.addServer(new ServerProperty("130.126.112.117", 1122));
+		client.addServer(new ServerProperty("130.126.112.148", 1133));
+		client.addServer(new ServerProperty("130.126.112.146", 1144));
 		client.connect(args);
 	}
 }
