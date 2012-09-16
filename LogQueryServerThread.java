@@ -4,6 +4,8 @@ import java.util.*;
 class LogQueryServerThread extends Thread {
 	private Socket clientSock;
 	private String logFilePath;
+	private BufferedWriter output = null;
+	private ObjectInputStream input = null;
 
 	LogQueryServerThread(Socket client_sock, String log_file_path) {
 		if (client_sock == null) {
@@ -18,10 +20,9 @@ class LogQueryServerThread extends Thread {
 		System.out.println(ex.getMessage());
 	}	
 
-	private List< String > grep(List< String > args) {
+	private void grep(List< String > args) {
 		Runtime runtime = Runtime.getRuntime();
 		Process process = null;
-		ArrayList< String > result_list = new ArrayList< String >();
 		try {
 			LinkedList< String > cmd_array = new LinkedList< String >(args);
 			cmd_array.add(logFilePath);
@@ -31,24 +32,25 @@ class LogQueryServerThread extends Thread {
 				new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line;
 			while((line = result.readLine()) != null) {
-				result_list.add(line);
+				output.write(line);
+				output.newLine();
 			}
+			output.flush();
 			process.waitFor();
 		} catch(InterruptedException ex) {
 			exceptionHandler(ex);
 		} catch(IOException ex) {
 			exceptionHandler(ex);
 		}
-		return result_list;
 	}
 
 	public void run() {
 		try {	
-			ObjectOutputStream output = new ObjectOutputStream(clientSock.getOutputStream());
-			ObjectInputStream input = new ObjectInputStream(clientSock.getInputStream());
+			output = new BufferedWriter(new OutputStreamWriter(clientSock.getOutputStream()));
+			input = new ObjectInputStream(clientSock.getInputStream());
 			List< String > args = (List< String >) input.readObject();
 			System.out.println("Received request: " + args.toString());
-			output.writeObject(grep(args));
+			grep(args);
 			output.close();
 			input.close();
 			clientSock.close();
