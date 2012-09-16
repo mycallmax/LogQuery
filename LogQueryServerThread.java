@@ -18,12 +18,11 @@ class LogQueryServerThread extends Thread {
 		System.out.println(ex.getMessage());
 	}	
 
-	private void grep(List< String > args,ObjectInputStream input,ObjectOutputStream output) {
+	private List< String > grep(List< String > args) {
 		Runtime runtime = Runtime.getRuntime();
 		Process process = null;
 		ArrayList< String > result_list = new ArrayList< String >();
 		try {
-      long size = 0;
 			LinkedList< String > cmd_array = new LinkedList< String >(args);
 			cmd_array.add(logFilePath);
 			cmd_array.add(0, "grep");
@@ -32,40 +31,26 @@ class LogQueryServerThread extends Thread {
 				new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line;
 			while((line = result.readLine()) != null) {
-			  // Send result in chunks of 4MB
-        size = size + line.length(); 
 				result_list.add(line);
-				if(size > 4194304)
-				{
-				  output.writeObject(result_list);
-          output.flush();
-          output.writeObject("wait");
-					output.flush();
-					size = 0;
-				  result_list.clear();
-			  }  	
 			}
-			output.writeObject(result_list);
-      output.flush();
-      output.writeObject("done"); 
-      output.flush();
 			process.waitFor();
 		} catch(InterruptedException ex) {
 			exceptionHandler(ex);
 		} catch(IOException ex) {
 			exceptionHandler(ex);
 		}
+		return result_list;
 	}
 
 	public void run() {
-		try {
-      ObjectOutputStream output = new ObjectOutputStream(clientSock.getOutputStream());	
+		try {	
+			ObjectOutputStream output = new ObjectOutputStream(clientSock.getOutputStream());
 			ObjectInputStream input = new ObjectInputStream(clientSock.getInputStream());
-      List< String > args = (List< String >) input.readObject();
+			List< String > args = (List< String >) input.readObject();
 			System.out.println("Received request: " + args.toString());
-      grep(args,input,output);
-      input.close();
+			output.writeObject(grep(args));
 			output.close();
+			input.close();
 			clientSock.close();
 		} catch(IOException ex) {
 			exceptionHandler(ex);

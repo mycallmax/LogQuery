@@ -8,25 +8,11 @@ class LogQueryClientThread extends Thread {
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private LogQueryClient parent;
-  private Object resultQueue = new Object();
 	LogQueryClientThread(ServerProperty server, List< String > args, LogQueryClient parent) {
 		this.parent = parent;
 		this.server = server;
 		this.args = args;
 	}
-
-  private void printResult(List< String > result) {
-    if (result == null) {
-      return;
-    }
-    synchronized(resultQueue){
-    System.out.println(
-      "Result from the Server " + server.ip + ":" + server.port + ":");
-    for (String entry : result) {
-      System.out.println(entry);
-    }
-   }
-  }
 
 	public void run() {
 		try {
@@ -35,13 +21,7 @@ class LogQueryClientThread extends Thread {
 			input = new ObjectInputStream(sock.getInputStream());
 			output.writeObject(args);
 			output.flush();
-		  String message = "wait";
-			while(message.equals("wait"))
-		  {
-				result = (List< String >) input.readObject();
-				printResult(result);
-        message = (String)input.readObject();
-		  } 
+			result = (List< String >) input.readObject();
 			output.close();
 			input.close();
 			sock.close();
@@ -53,5 +33,13 @@ class LogQueryClientThread extends Thread {
 		} catch(ClassNotFoundException ex) {
 			System.out.println(ex.getMessage());
 		}
+	}
+
+	public List< String > getResult() {
+		return result;	
+	}
+
+	public ServerProperty getServer() {
+		return server;
 	}
 }

@@ -22,9 +22,21 @@ class LogQueryClient {
 		for (LogQueryClientThread worker : worker_list) {
 			try {
 				worker.join();
+				printResult(worker.getServer(), worker.getResult());
 			} catch(InterruptedException ex) {
 				System.out.println(ex.getMessage());
 			}
+		}
+	}
+
+	private void printResult(ServerProperty server, List< String > result) {
+		if (result == null) {
+			return;
+		}
+		System.out.println(
+			"Result from the Server " + server.ip + ":" + server.port + ":");
+		for (String entry : result) {
+			System.out.println(entry);
 		}
 	}
 
@@ -35,7 +47,7 @@ class LogQueryClient {
 		}
 		LogQueryClient client = new LogQueryClient();
 		client.addServer(new ServerProperty("localhost", 1111));
-	  client.addServer(new ServerProperty("localhost", 1122));
+		client.addServer(new ServerProperty("localhost", 1122));
 		client.addServer(new ServerProperty("localhost", 1133));
 		client.addServer(new ServerProperty("localhost", 1144));
 		client.connect(args);
