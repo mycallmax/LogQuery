@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
 ## Unit Test Configuration
-server_list=("localhost" "localhost" "localhost" "localhost")
-#server_list=("linux4.ews.illinois.edu" "linux5.ews.illinois.edu" "linux6.ews.illinois.edu" "linux7.ews.illinois.edu")
+server_list=("130.126.112.146" "130.126.112.117" "130.126.112.148" "130.126.112.146")
 port_list=(1111 1122 1133 1144)
-log_path="~/code/java/LogQuery/logs"
+log_path="~/code/LogQuery/logs"
 server_list_num=${#server_list[@]}
 result_path=/tmp/LogQueryResult
 answer_path=/tmp/LogQueryAnswer
