@@ -1,1 +1,74 @@
-Hit 'make' to build the class file
+
+----------------------------------------------------------------------
+Distributed Log query system:
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Build:
+----------------------------------------------------------------------
+Makefile is provided to build the source files (.java files)
+- Hit 'make' to build the class files
+
+----------------------------------------------------------------------
+Starting the service:
+----------------------------------------------------------------------
+Use the below command to initiate the grep service
+
+"java LogQueryServer <port_number> <logfile_path>"
+
+<port_number>:   TCP port number
+<logfile_path>:  Path where log file resides
+
+eg. 'java LogQueryServer 1111 logs/machine.1.log'
+
+Note: Make sure that grep services are initialized for all nodes.
+The distributed grep client will have the node addresses and port
+numbers initialized with the code.
+Note: To ensure that this can be run on EWS machines in the lab,
+we have used the below EWS nodes to participate in our distributed 
+grep system
+i.p									port
+130.126.112.146			1111
+130.126.112.117     1122
+130.126.112.148			1133
+130.126.112.146			1144
+
+---------------------------------------------------------------------
+Starting the query:
+---------------------------------------------------------------------
+A query can be initiated from any node using the below command
+
+"java LogQueryClient <grep_arg1> <grep_arg2> ... <grep_argN>"
+
+<grep_argN> : Nth argument for the grep command (all grep arugments are appliable)
+
+eg. 'java LogQueryClient -E "Hello.*World"'
+
+Note:
+- A unit test suite is created to perform different tests and verify
+the results.The different tests cover "rare", "frequent" and "somewhat 
+frequent" patterns for one/all/some machines. The script can be used
+with varying log file sizes. To avoid typing password each time the
+unit test is run, please follow the instruction in the following link to
+enable SSH connection without typing password:
+	http://www.linuxproblem.org/art_9.html
+- Add the node list with port numbers and log file paths to the 
+unit test script before executing the script
+
+'make unittest' or './LogQueryUnitTest.sh'
+
+----------------------------------------------------------------------
+Log Generator
+----------------------------------------------------------------------
+Log generator can be use to create sample log files that matches the
+real world logs. The logging is done using random generator to ensure
+'frequent', 'rare' and 'somewhat frequent' patterns in the log file
+
+Logs can be generated using below command
+
+"java LogGenerator <file_size> <machine_id>
+
+<file_size> : The size of log file to be generated
+<machine_id>: The node for which the log is generated. A logical id can
+be assigned for each machine
+
