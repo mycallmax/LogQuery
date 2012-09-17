@@ -19,7 +19,7 @@ Use the below command to initiate the grep service
 <port_number>:   TCP port number
 <logfile_path>:  Path where log file resides
 
-eg. 'java LogQueryServer 1111 logs/machine.1.log'
+eg. 'java LogQueryServer 1111 /tmp/logs/machine.1.log'
 
 Note: Make sure that grep services are initialized for all nodes.
 The distributed grep client will have the node addresses and port
@@ -66,8 +66,9 @@ real world logs. The logging is done using random generator to ensure
 
 Logs can be generated using below command
 
-"java LogGenerator <file_size> <machine_id>
+"java LogGenerator <log_path> <file_size> <machine_id>
 
+<log_path> : The path that you store the output log file
 <file_size> : The size of log file to be generated
 <machine_id>: The node for which the log is generated. A logical id can
 be assigned for each machine

@@ -3,7 +3,7 @@
 ## Unit Test Configuration
 server_list=("130.126.112.146" "130.126.112.117" "130.126.112.148" "130.126.112.146")
 port_list=(1111 1122 1133 1144)
-log_path="~/code/LogQuery/logs"
+log_path="/tmp/kk_logs"
 server_list_num=${#server_list[@]}
 result_path=/tmp/LogQueryResult
 answer_path=/tmp/LogQueryAnswer
@@ -11,10 +11,14 @@ filesize=1
 
 ## arg1 = unit test name, arg2 = grep args
 generate_log() {
-	mkdir -p logs
+	echo "Start generating log file with size $filesize MB";
+	mkdir -p $log_path
 	for ((i=1;i<=$server_list_num;i++)); do
-		java LogGenerator $filesize $i
+		ssh ${server_list[$(($i-1))]} "mkdir -p $log_path"
+		java LogGenerator $log_path $filesize $i
+		scp $log_path/machine.$i.log ${server_list[$(($i-1))]}:$log_path
 	done
+	echo "Finished generating log file";
 }
 test_grep() {
 	java LogQueryClient -E "$2" > $result_path

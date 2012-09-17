@@ -22,10 +22,10 @@ public class LogGenerator
 
 	// class functions
 	// Init class members 
-	LogGenerator(int FileSize, int MachineID)
+	LogGenerator(String log_path, int FileSize, int MachineID)
 	{
 		this.MachineID = MachineID;
-		this.FileName = "logs/machine." + MachineID + ".log";
+		this.FileName = log_path + "/machine." + MachineID + ".log";
 		this.FileSize = FileSize;
 		file = new File(FileName);
 	}
@@ -119,12 +119,12 @@ public class LogGenerator
 	// Main Funtion
 	public static void main(String[] args)
 	{
-	 if (args.length < 2) {
-      System.out.println("Usage: java LogGenerator <filesize> <MachineID>");
+	 if (args.length < 3) {
+      System.out.println("Usage: java LogGenerator <log_path> <filesize> <MachineID>");
       System.exit(-1);
     }
 
-		LogGenerator MyLogGenerator = new LogGenerator(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+		LogGenerator MyLogGenerator = new LogGenerator(args[0], Integer.parseInt(args[1]),Integer.parseInt(args[2]));
 		MyLogGenerator.generate();
 	}
 } 
